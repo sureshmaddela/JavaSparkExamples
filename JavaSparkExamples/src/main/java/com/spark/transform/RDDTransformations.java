@@ -1,6 +1,8 @@
 package com.spark.transform;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -29,9 +31,10 @@ public class RDDTransformations {
 		
 		
 		System.out.println("******************** FlatMap to Pair **********************");
-		//flatRDD.flatMapToPair(t -> new Tuple2<Strint,Integer>(t,t.length()));
-		// toDO
-		
+		JavaRDD<String> stringRDD = sc.parallelize(Arrays.asList("This","is an","example","of","FlatMapToPair"));
+		JavaPairRDD<String,Integer> rdd = stringRDD.flatMapToPair(s->	Arrays.asList(s.split("	")).stream().map(word -> new Tuple2<String, Integer>(word, word.length())).iterator());
+		System.out.println(rdd.collect());
+
 		
 		sc.close();
 		
