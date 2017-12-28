@@ -15,7 +15,9 @@ public class DatasetUsingEncoders {
 		
 		Encoder<Person> personEncoder = Encoders.bean(Person.class);
 
-		Dataset<Person> peopleDS = sparkSession.read().json("person.json").as(personEncoder);
+		////option("multiline",true) for multiline json files. otherwise try to keep all elements in single line in json file. Applicable for Spark = >2.2
+		Dataset<Person> peopleDS = sparkSession.read().option("multiLine", true).option("mode", "PERMISSIVE").json("person.json").as(personEncoder);
+		//Dataset<Row> peopleDS = sparkSession.read().option("multiLine", true).option("mode", "PERMISSIVE").json("person.json");
 		peopleDS.printSchema();
 		peopleDS.show();
 	}
